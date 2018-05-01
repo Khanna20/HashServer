@@ -1,0 +1,4 @@
+com\harman\knowledgeBase\models\Message.class
+com\harman\knowledgeBase\config\DroolsBeanFactory$1.class
+com\harman\knowledgeBase\service\knowledgeBaseService.class
+com\harman\knowledgeBase\config\DroolsBeanFactory.class

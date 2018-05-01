@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.harman.hash</groupId>
+		<artifactId>projectBuilder</artifactId>
+		<version>1.0.0</version>
+		<relativePath>../hashProjectBuilder/pom.xml</relativePath>
+	</parent>
+
+	
+	<artifactId>knowledge-base</artifactId>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.harman.hash</groupId>
+			<artifactId>knowledge-rules</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-decisiontables</artifactId>
+        </dependency>
+        
+       
+		
+	</dependencies>
+</project>
