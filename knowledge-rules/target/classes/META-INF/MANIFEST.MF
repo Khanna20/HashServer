@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: knowledge-rules
 Implementation-Version: 1.0.0
-Built-By: inkkhanna
+Built-By: intahmad
 Implementation-Vendor-Id: com.harman.hash
-Build-Jdk: 1.8.0_161
+Build-Jdk: 1.8.0_171
 Created-By: Maven Integration for Eclipse
 Implementation-Vendor: Harman India
 
