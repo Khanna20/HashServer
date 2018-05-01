@@ -1,0 +1,77 @@
+package com.harman.dao.skillserver.impl;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+
+import com.harman.skillserver.beans.AccessTokenUpdate;
+import com.harman.skillserver.constants.SkillServerConstant;
+import com.harman.skillserver.dao.UserDao;
+import com.harman.skillserver.model.LoginModel;
+import com.harman.skillserver.model.User;
+
+public class UserDaoImpl implements UserDao {
+
+	@Autowired
+	DataSource datasource;
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	NamedParameterJdbcTemplate namedJdbcTemplate;
+
+	@Override
+	public void register(User user) {
+		String sql = "insert into users values(?,?,?,?,?)";
+		jdbcTemplate.update(sql, new Object[] { user.getUsername(), user.getPassword(), user.getFirstname(),
+				user.getLastname(), user.getEmail() });
+
+	}
+
+	@Override
+	public User validateUser(LoginModel login) {
+
+		String sql = "select * from users where username='" + login.getUsername() + "' and password='"
+				+ login.getPassword() + "'";
+		List<User> users = jdbcTemplate.query(sql, new UserMapper());
+		return users.size() > 0 ? users.get(0) : null;
+	}
+
+	class UserMapper implements RowMapper<User> {
+		public User mapRow(ResultSet rs, int arg1) throws SQLException {
+			User user = new User();
+			user.setUsername(rs.getString(SkillServerConstant.USERNAME));
+			user.setPassword(rs.getString(SkillServerConstant.PASSWORD));
+			user.setFirstname(rs.getString(SkillServerConstant.FIRSTNAME));
+			user.setLastname(rs.getString(SkillServerConstant.LASTNAME));
+			user.setEmail(rs.getString(SkillServerConstant.EMAIL));
+			return user;
+		}
+	}
+
+	@Override
+	public void updateAccessToken(AccessTokenUpdate tokenUpdate) {
+
+		String insertSql = "insert into UserVAAccounts values(?,?,?)";
+		String updateSql = "update UserVAAccounts set accessToken = :accessToken  where username = :username and emailID = :emailID";
+		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("emailID", tokenUpdate.getEmailID())
+				.addValue("accessToken", tokenUpdate.getAccessToken()).addValue("username", tokenUpdate.getUsername());
+		int status = namedJdbcTemplate.update(updateSql, namedParameters);
+		if (status != 0) {
+			System.out.println("update command executes successfully");
+		} else {
+			jdbcTemplate.update(insertSql,
+					new Object[] { tokenUpdate.getEmailID(), tokenUpdate.getAccessToken(), tokenUpdate.getUsername() });
+		}
+
+	}
+}
