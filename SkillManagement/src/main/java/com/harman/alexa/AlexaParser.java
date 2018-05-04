@@ -1,8 +1,11 @@
 package com.harman.alexa;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.harman.skillserver.model.google_intent_model.GooglePickUpParametersModel;
 
 public class AlexaParser {
 
@@ -70,6 +73,28 @@ public class AlexaParser {
 		request.put("apiaccess_token", "djjdjd");
 		request.put("intent", "add");
 		request.put("list_name", "to-do");
+		request.put("requestId", "amzn1.echo-api.request." + System.currentTimeMillis());
+		request.put("timestamp", "2015-05-13T12:34:56Z");
+		request.put("message", message);
+
+		jsonObject.put("request", request);
+		JSONObject data = new JSONObject();
+
+		data.put("data", jsonObject);
+		System.out.println(data.toString());
+		return data.toString();
+	}
+	public static String parseShoppingList(GooglePickUpParametersModel model) {
+		JSONObject jsonObject = new JSONObject();
+		JSONObject message = new JSONObject();
+		JSONObject request = new JSONObject();
+		request.put("type", "Messaging.MessageReceived");
+
+		
+		message.put("notice", StringUtils.join(model.getShoppingList(), ","));
+		request.put("apiaccess_token", "djjdjd");
+		request.put("intent", "add");
+		request.put("list_name", "Shopping List");
 		request.put("requestId", "amzn1.echo-api.request." + System.currentTimeMillis());
 		request.put("timestamp", "2015-05-13T12:34:56Z");
 		request.put("message", message);
